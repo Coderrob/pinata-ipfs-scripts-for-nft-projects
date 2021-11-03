@@ -109,4 +109,5 @@ dist
 # Ignore script output
 pinata-cids.json
 file-cids.json
-result.json
+file-hashes.json
+upload-result.json

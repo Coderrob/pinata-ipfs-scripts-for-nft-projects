@@ -12,6 +12,6 @@ const FileStatus = {
 
 module.exports = {
   MAX_PAGE_LIMIT,
-  getFileName,
   FileStatus,
+  getFileName,
 };

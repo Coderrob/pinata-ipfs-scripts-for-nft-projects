@@ -107,5 +107,6 @@ dist
 .env*
 
 # Ignore script output
-cid-mapping.json
+pinata-cids.json
+file-cids.json
 result.json

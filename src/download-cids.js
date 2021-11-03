@@ -28,7 +28,7 @@ const pinataSDK = require("@pinata/sdk");
   };
 
   try {
-    const outputPath = "./cid-mapping.json";
+    const outputPath = "./pinata-cids.json";
     let pageOffset = 0;
     let cidMapping = {};
     let hasMappings = true;

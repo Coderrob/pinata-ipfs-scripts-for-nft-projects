@@ -7,7 +7,7 @@ const Bottleneck = require("bottleneck");
 const pinataSDK = require("@pinata/sdk");
 
 (async () => {
-  const fileMappings = fs.readJsonSync("./cid-mapping.json") ?? {};
+  const pinataCIDs = fs.readJsonSync("./pinata-cids.json") ?? {};
   const pinata = pinataSDK(PINATA_API_KEY, PINATA_API_SECRET);
 
   const limiter = new Bottleneck({
@@ -17,8 +17,8 @@ const pinataSDK = require("@pinata/sdk");
 
   const cidExists = (name) => {
     return {
-      exists: !!fileMappings[name],
-      ipfsHash: fileMappings[name],
+      exists: !!pinataCIDs[name],
+      ipfsHash: pinataCIDs[name],
     };
   };
 
@@ -42,7 +42,7 @@ const pinataSDK = require("@pinata/sdk");
     const outputPath = "./result.json";
     const folderPath = "files";
     const cidMapping = {};
-    const { _, files } = await recursive.read(folderPath);
+    const { files } = await recursive.read(folderPath);
     if (files?.length > 0) {
       await Promise.all(
         files.map(async (path) => {

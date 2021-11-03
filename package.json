@@ -1,0 +1,32 @@
+{
+  "name": "nft-pinata-bulk-upload",
+  "version": "1.0.0",
+  "description": "Scripts to upload NFT data to Pinata",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Coderrob/nft-pinata-bulk-upload.git"
+  },
+  "keywords": [
+    "nft",
+    "pinata",
+    "metadata"
+  ],
+  "author": "coderrob",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Coderrob/nft-pinata-bulk-upload/issues"
+  },
+  "homepage": "https://github.com/Coderrob/nft-pinata-bulk-upload#readme",
+  "devDependencies": {
+    "@pinata/sdk": "^1.1.23",
+    "fs-extra": "^10.0.0",
+    "bottleneck": "^2.19.5",
+    "dotenv": "^10.0.0",
+    "recursive-fs": "^2.1.0"
+  },
+  "dependencies": {}
+}

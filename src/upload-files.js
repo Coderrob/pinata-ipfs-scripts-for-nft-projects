@@ -12,7 +12,7 @@ const pinataSDK = require("@pinata/sdk");
 
   const limiter = new Bottleneck({
     maxConcurrent: 1,
-    minTime: 3000, // 3 seconds
+    minTime: 3000, // Once every 3 seconds
   });
 
   const cidExists = (name) => {
@@ -39,7 +39,7 @@ const pinataSDK = require("@pinata/sdk");
   };
 
   try {
-    const outputPath = "./result.json";
+    const outputPath = "./upload-result.json";
     const folderPath = "files";
     const cidMapping = {};
     const { files } = await recursive.read(folderPath);

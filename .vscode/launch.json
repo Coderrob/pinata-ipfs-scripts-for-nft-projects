@@ -27,6 +27,14 @@
       "program": "${workspaceFolder}/src/calculate-cids.js",
       "skipFiles": ["<node_internals>/**"],
       "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Pinata Upload Metadata",
+      "program": "${workspaceFolder}/src/upload-metadata.js",
+      "skipFiles": ["<node_internals>/**"],
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

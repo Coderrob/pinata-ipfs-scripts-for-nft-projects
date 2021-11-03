@@ -22,12 +22,15 @@
   },
   "homepage": "https://github.com/Coderrob/nft-pinata-bulk-upload#readme",
   "devDependencies": {
+    "axios": "^0.24.0",
     "@pinata/sdk": "^1.1.23",
+    "base-path-converter": "^1.0.2",
     "bottleneck": "^2.19.5",
     "dotenv": "^10.0.0",
+    "form-data": "^4.0.0",
     "fs-extra": "^10.0.0",
-    "recursive-fs": "^2.1.0",
-    "ipfs-only-hash": "^4.0.0"
+    "ipfs-only-hash": "^4.0.0",
+    "recursive-fs": "^2.1.0"
   },
   "dependencies": {}
 }

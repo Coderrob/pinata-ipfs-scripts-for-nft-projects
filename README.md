@@ -37,6 +37,7 @@ Some scripts require environment variables to connect with the [Pinata API](http
 #### Environment Variables
 
 `PINATA_API_KEY` - The Pinata API Key environment variable
+
 `PINATA_API_SECRET` - The Pinata API Secret environment variable
 
 The repo is setup with [dotenv](https://github.com/motdotla/dotenv) and configured to allow using an `.env` file to run the scripts.

@@ -156,11 +156,11 @@ Once complete the script will output the file name and CID mappings to a file.
 
 > **Note** - To support `ipfs/<CID>/<TokenId>` such as `ipfs/QmR5m9zJDSmrLnYMawrySYu3wLgN5afo3yizevAaimjvmD/0` simple name the JSON files numerically and strip the file extensions. This will allow the files to be accessed by file name that can be mapped to the `TokenId`.
 
-![Pinata pinned file list](https://github.com/Coderrob/nft-pinata-bulk-upload/blob/master/img/pinned-list.png)
+![Pinata pinned file list](https://github.com/Coderrob/nft-pinata-bulk-upload/blob/master/img/pinned-list.PNG)
 
-![metadata folder container list](https://github.com/Coderrob/nft-pinata-bulk-upload/blob/master/img/metadata-list.png)
+![metadata folder container list](https://github.com/Coderrob/nft-pinata-bulk-upload/blob/master/img/metadata-list.PNG)
 
-![File 0 metadata json](https://github.com/Coderrob/nft-pinata-bulk-upload/blob/master/img/metadata-0.png)
+![File 0 metadata json](https://github.com/Coderrob/nft-pinata-bulk-upload/blob/master/img/metadata-0.PNG)
 
 #### Settings
 

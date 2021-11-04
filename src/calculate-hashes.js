@@ -1,34 +1,35 @@
-require("dotenv").config();
 const { getFileName } = require("./utils.js");
-const crypto = require("crypto");
 const fs = require("fs-extra");
 const Bottleneck = require("bottleneck");
+const crypto = require("crypto");
 const recursive = require("recursive-fs");
 
 (async () => {
-  const limiter = new Bottleneck({
-    maxConcurrent: 5,
+  const rateLimiter = new Bottleneck({
+    maxConcurrent: 5, // arbitrary value - don't overdue file access
   });
 
   try {
-    const outputPath = "./file-hashes.json";
+    const outputPath = "./output/file-hashes.json";
     const folderPath = "files";
     const hashMapping = {};
     const { files } = await recursive.read(folderPath);
-    if (files?.length > 0) {
-      await Promise.all(
-        files.map((path) =>
-          limiter.schedule(() => {
-            const name = getFileName(path);
-            const data = fs.readFileSync(path);
-            hashMapping[name] = crypto
-              .createHash("sha256")
-              .update(data)
-              .digest("hex");
-          })
-        )
-      );
+    if (files?.length <= 0) {
+      console.info("No files were found in folder path.");
+      return;
     }
+    await Promise.all(
+      files.map((filePath) =>
+        rateLimiter.schedule(() => {
+          const fileName = getFileName(filePath);
+          const fileData = fs.readFileSync(filePath);
+          hashMapping[fileName] = crypto
+            .createHash("sha256")
+            .update(fileData)
+            .digest("hex");
+        })
+      )
+    );
     fs.outputJsonSync(outputPath, hashMapping);
   } catch (error) {
     console.error(error);

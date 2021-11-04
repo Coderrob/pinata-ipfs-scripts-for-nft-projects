@@ -201,7 +201,7 @@ The upload folder script will iterate the contents of a specified folder, and wi
 
 Once complete the script will output the folder name and CID mapping to a file.
 
-> **Note** - To support `ipfs/<CID>/<TokenId>` such as `ipfs/QmR5m9zJDSmrLnYMawrySYu3wLgN5afo3yizevAaimjvmD/0` simple name the JSON files numerically and strip the file extensions. This will allow the files to be accessed by file name that can be mapped to the `TokenId`.
+> **Note** - To support `ipfs/<CID>/<TokenId>` such as `ipfs/QmR5m9zJDSmrLnYMawrySYu3wLgN5afo3yizevAaimjvmD/0` simply name the JSON files with numeric names and strip the file extensions. This will allow the files to be accessed by a numeric file name that can be easily mapped to the `TokenId`.
 
 ![Pinata pinned file list](https://github.com/Coderrob/nft-pinata-bulk-upload/blob/master/img/pinned-list.PNG)
 

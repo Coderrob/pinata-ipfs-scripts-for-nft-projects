@@ -107,7 +107,4 @@ dist
 .env*
 
 # Ignore script output
-pinata-cids.json
-file-cids.json
-file-hashes.json
-upload-result.json
+output

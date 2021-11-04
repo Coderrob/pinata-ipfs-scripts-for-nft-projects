@@ -9,7 +9,7 @@ The scripts contained in this repository were created to help automate the impor
 - `calculate-cids.js` - calculate the IPFS hash CID for every file in a specified folder
 - `calculate-hashes.js` - calculate the sha256 hash for every file in a specified folder
 - `download-cids.js` - downloads every pinned file from Pinata for an API account
-- `upload-files.js` - uploads the condents of a specified folder and pins each individual file in Pinata
+- `upload-files.js` - uploads the contents of a specified folder and pins each individual file in Pinata
 - `upload-folder.js` - uploads the contents of a specified folder and pins the folder container and its contents
 
 ### Getting Started
@@ -32,7 +32,7 @@ Install dependencies.
 >_ npm install
 ```
 
-Some scripts require environment variables to connect with the [Pinata API](https://docs.pinata.cloud/). These environment variales are needed to download pinned files, or to upload files and folders.
+Some scripts require environment variables to connect with the [Pinata API](https://docs.pinata.cloud/). These environment variables are needed to download pinned files, or to upload files and folders.
 
 #### Environment Variables
 
@@ -158,7 +158,7 @@ node ./src/download-cids.js
 
 `/src/upload-files.js`
 
-The upload files script will iterate the contents of a specified folder, and will upload and pin each _individual_ file to Pinata. After a successful upload the file name will be mapped to the IPFS hash CID from the response.
+The upload files script will iterate the contents of a specified folder and will upload and pin each _individual_ file to Pinata. After a successful upload the file name will be mapped to the IPFS hash CID from the response.
 
 Once complete the script will output the file name and CID mappings to a file.
 
@@ -197,7 +197,7 @@ node ./src/upload-files.js
 
 `/src/upload-folder.js`
 
-The upload folder script will iterate the contents of a specified folder, and will upload and pin each file under a folder container in Pinata. After a successful upload the folder name will be mapped to the IPFS hash CID from the response.
+The upload folder script will iterate the contents of a specified folder and will upload and pin each file under a folder container in Pinata. After a successful upload the folder name will be mapped to the IPFS hash CID from the response.
 
 Once complete the script will output the folder name and CID mapping to a file.
 

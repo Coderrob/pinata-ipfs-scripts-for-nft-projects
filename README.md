@@ -1,10 +1,56 @@
 # Pinata IPFS scripts for NFT projects
 
-This page tells you how to get started uploading NFT images to Pinata, computing the sha256 hashes, and how to associate a TokenID to specific IPFS metadata.
-
-<a href="https://www.buymeacoffee.com/coderrob" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+<a href="https://www.buymeacoffee.com/coderrob" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-white.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 ## Scripts
+
+The scripts contained in this repository were created to help automate the import and processing of NFT profile pic projects. Each script serves a unique purpose and when combined will help import both NFT images and the associated image metadata. A brief description of the scripts is below:
+
+- `calculate-cids.js` - calculate the IPFS hash CID for every file in a specified folder
+- `calculate-hashes.js` - calculate the sha256 hash for every file in a specified folder
+- `download-cids.js` - downloads every pinned file from Pinata for an API account
+- `upload-files.js` - uploads the condents of a specified folder and pins each individual file in Pinata
+- `upload-folder.js` - uploads the contents of a specified folder and pins the folder container and its contents
+
+### Getting Started
+
+Clone the repository.
+
+```bash
+>_ git clone https://github.com/Coderrob/nft-pinata-bulk-upload.git
+```
+
+Change directory to the `nft-pinata-bulk-upload` folder.
+
+```bash
+>_ cd nft-pinata-bulk-upload
+```
+
+Install dependencies.
+
+```bash
+npm install
+```
+
+Some scripts require environment variables to use the [Pinata SDK](https://github.com/PinataCloud/Pinata-SDK). These environment variales are needed to download pinned files, or to upload files and folders.
+
+#### Environment Variables
+
+`PINATA_API_KEY` - The Pinata API Key environment value
+`PINATA_API_SECRET` - The Pinata API Secret environment value
+
+The repo is setup with [dotenv](https://github.com/motdotla/dotenv) and configured to allow using a `.env` file to run the scripts.
+
+If a file does not already exist simply create a new `.env` file at the root of the repository.
+
+The contents of the `.env` file should look similar to this:
+
+```ini
+PINATA_API_KEY="a1237a8dcd87766ff4"
+PINATA_API_SECRET="fb8654309ca8777asdf7558758123456asdf817166927aknnk888877"
+```
+
+To generate these Pinata API keys you'll need to follow the [Get Started](https://docs.pinata.cloud/#your-api-keys) Pinata documentation
 
 ### Calculate File IPFS CIDs
 
@@ -146,13 +192,13 @@ node ./src/upload-files.js
 }
 ```
 
-### Upload Metadata
+### Upload Folder
 
-`/src/upload-metadata.js`
+`/src/upload-folder.js`
 
-The upload files script will iterate the contents of a specified folder, and will upload and pin each _individual_ file to Pinata. After a successful upload the file name will be mapped to the IPFS hash CID from the response.
+The upload folder script will iterate the contents of a specified folder, and will upload and pin each file under a folder container in Pinata. After a successful upload the folder name will be mapped to the IPFS hash CID from the response.
 
-Once complete the script will output the file name and CID mappings to a file.
+Once complete the script will output the folder name and CID mapping to a file.
 
 > **Note** - To support `ipfs/<CID>/<TokenId>` such as `ipfs/QmR5m9zJDSmrLnYMawrySYu3wLgN5afo3yizevAaimjvmD/0` simple name the JSON files numerically and strip the file extensions. This will allow the files to be accessed by file name that can be mapped to the `TokenId`.
 

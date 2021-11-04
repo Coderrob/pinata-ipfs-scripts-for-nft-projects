@@ -7,15 +7,7 @@
     {
       "type": "pwa-node",
       "request": "launch",
-      "name": "Pinata Upload Files",
-      "program": "${workspaceFolder}/src/upload-files.js",
-      "skipFiles": ["<node_internals>/**"],
-      "envFile": "${workspaceFolder}/.env"
-    },
-    {
-      "type": "pwa-node",
-      "request": "launch",
-      "name": "Pinata Download CIDs",
+      "name": "Download IPFS hash CIDs",
       "program": "${workspaceFolder}/src/download-cids.js",
       "skipFiles": ["<node_internals>/**"],
       "envFile": "${workspaceFolder}/.env"
@@ -23,7 +15,7 @@
     {
       "type": "pwa-node",
       "request": "launch",
-      "name": "Calculate File CIDs",
+      "name": "Calculate File IPFS hash CIDs",
       "program": "${workspaceFolder}/src/calculate-cids.js",
       "skipFiles": ["<node_internals>/**"],
       "envFile": "${workspaceFolder}/.env"
@@ -31,7 +23,7 @@
     {
       "type": "pwa-node",
       "request": "launch",
-      "name": "Calculate File Hashes",
+      "name": "Calculate File sha256 Hashes",
       "program": "${workspaceFolder}/src/calculate-hashes.js",
       "skipFiles": ["<node_internals>/**"],
       "envFile": "${workspaceFolder}/.env"
@@ -39,8 +31,16 @@
     {
       "type": "pwa-node",
       "request": "launch",
-      "name": "Pinata Upload Metadata",
-      "program": "${workspaceFolder}/src/upload-metadata.js",
+      "name": "Upload Files",
+      "program": "${workspaceFolder}/src/upload-files.js",
+      "skipFiles": ["<node_internals>/**"],
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Upload Folder",
+      "program": "${workspaceFolder}/src/upload-folder.js",
       "skipFiles": ["<node_internals>/**"],
       "envFile": "${workspaceFolder}/.env"
     }

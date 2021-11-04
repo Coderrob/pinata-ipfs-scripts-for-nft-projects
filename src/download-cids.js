@@ -75,7 +75,7 @@ const pinataSDK = require("@pinata/sdk");
       pageOffset += 1;
       hasMappings = fileMapping?.length > 0;
     }
-    if (Object.keys(cidMapping) <= 0) {
+    if (Object.keys(cidMapping).length <= 0) {
       console.info("No pinned files were found.");
       return;
     }

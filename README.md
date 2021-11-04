@@ -29,19 +29,19 @@ Change directory to the `nft-pinata-bulk-upload` folder.
 Install dependencies.
 
 ```bash
-npm install
+>_ npm install
 ```
 
-Some scripts require environment variables to use the [Pinata SDK](https://github.com/PinataCloud/Pinata-SDK). These environment variales are needed to download pinned files, or to upload files and folders.
+Some scripts require environment variables to connect with the [Pinata API](https://docs.pinata.cloud/). These environment variales are needed to download pinned files, or to upload files and folders.
 
 #### Environment Variables
 
-`PINATA_API_KEY` - The Pinata API Key environment value
-`PINATA_API_SECRET` - The Pinata API Secret environment value
+`PINATA_API_KEY` - The Pinata API Key environment variable
+`PINATA_API_SECRET` - The Pinata API Secret environment variable
 
-The repo is setup with [dotenv](https://github.com/motdotla/dotenv) and configured to allow using a `.env` file to run the scripts.
+The repo is setup with [dotenv](https://github.com/motdotla/dotenv) and configured to allow using an `.env` file to run the scripts.
 
-If a file does not already exist simply create a new `.env` file at the root of the repository.
+If the env file does not already exist simply create a new `.env` file at the root of the repository.
 
 The contents of the `.env` file should look similar to this:
 
@@ -50,7 +50,7 @@ PINATA_API_KEY="a1237a8dcd87766ff4"
 PINATA_API_SECRET="fb8654309ca8777asdf7558758123456asdf817166927aknnk888877"
 ```
 
-To generate these Pinata API keys you'll need to follow the [Get Started](https://docs.pinata.cloud/#your-api-keys) Pinata documentation
+To generate these Pinata API keys you'll need to follow the [Getting Started](https://docs.pinata.cloud/#your-api-keys) Pinata documentation
 
 ### Calculate File IPFS CIDs
 

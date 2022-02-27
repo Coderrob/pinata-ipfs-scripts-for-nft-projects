@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Rob (Coderrob) Lindley
+Copyright (c) 2022 Rob (Coderrob) Lindley
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,13 @@ SOFTWARE.
 
 */
 
-const { getFileName } = require("./utils.js");
-const fs = require("fs-extra");
-const Bottleneck = require("bottleneck");
-const crypto = require("crypto");
-const recursive = require("recursive-fs");
+import { readFileSync, outputJsonSync } from 'fs-extra';
+import Bottleneck from 'bottleneck';
+import { createHash } from 'crypto';
+import { read } from 'recursive-fs';
+import { getFileName } from './utils';
+
+const { log, error } = console;
 
 (async () => {
   const rateLimiter = new Bottleneck({
@@ -35,29 +37,29 @@ const recursive = require("recursive-fs");
   });
 
   try {
-    const outputPath = "./output/file-hashes.json";
-    const folderPath = "files";
+    const outputPath = './output/file-hashes.json';
+    const folderPath = 'files';
     const hashMapping = {};
-    const { files } = await recursive.read(folderPath);
+    const { files } = await read(folderPath);
     if (files?.length <= 0) {
-      console.info("No files were found in folder path.");
+      log(`No files were found in folder '${folderPath}'`);
       return;
     }
     await Promise.all(
-      files.map((filePath) =>
-        rateLimiter.schedule(() => {
-          const fileName = getFileName(filePath);
-          const fileData = fs.readFileSync(filePath);
-          hashMapping[fileName] = crypto
-            .createHash("sha256")
-            .update(fileData)
-            .digest("hex");
-        })
-      )
+      files.map((filePath) => rateLimiter.schedule(() => {
+        const fileName = getFileName(filePath);
+        log(`${fileName} hash started`);
+        const fileData = readFileSync(filePath);
+        const fileHash = createHash('sha256')
+          .update(fileData)
+          .digest('hex');
+        log(`${fileName} sha256: ${fileHash}`);
+        hashMapping[fileName] = fileHash;
+      })),
     );
-    fs.outputJsonSync(outputPath, hashMapping);
-  } catch (error) {
-    console.error(error);
+    outputJsonSync(outputPath, hashMapping);
+  } catch (err) {
+    error(err);
     process.exit(1);
   }
 })();

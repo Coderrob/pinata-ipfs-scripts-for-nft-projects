@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Rob (Coderrob) Lindley
+Copyright (c) 2022 Rob (Coderrob) Lindley
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,52 +23,57 @@ SOFTWARE.
 
 */
 
-require("dotenv").config();
-const { PINATA_API_KEY, PINATA_API_SECRET } = process.env;
-const axios = require("axios");
-const fs = require("fs-extra");
-const recursive = require("recursive-fs");
-const FormData = require("form-data");
-const basePathConverter = require("base-path-converter");
+import { post } from 'axios';
+import { createReadStream, outputJsonSync } from 'fs-extra';
+import { read } from 'recursive-fs';
+import FormData from 'form-data';
+import basePathConverter from 'base-path-converter';
 
-const PINATA_API_PINFILETOIPFS =
-  "https://api.pinata.cloud/pinning/pinFileToIPFS";
+require('dotenv').config();
+
+const { PINATA_API_KEY, PINATA_API_SECRET } = process.env;
+
+const { log, error } = console;
+
+const PINATA_API_PINFILETOIPFS = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
 
 (async () => {
   try {
-    const outputPath = "./output/folder-cid.json";
-    const folderName = "metadata";
-    const folderPath = "metadata";
-    const { files } = await recursive.read(folderPath);
+    const outputPath = './output/folder-cid.json';
+    const folderName = 'metadata';
+    const folderPath = 'metadata';
+    const { files } = await read(folderPath);
     if (files?.length <= 0) {
-      console.info("No files were found in folder path.");
+      log(`No files were found in folder '${folderPath}'`);
       return;
     }
     const formData = new FormData();
     files.forEach((filePath) => {
-      formData.append("file", fs.createReadStream(filePath), {
+      log(`Appending file: ${filePath}`);
+      formData.append('file', createReadStream(filePath), {
         filepath: basePathConverter(folderPath, filePath),
       });
     });
     formData.append(
-      "pinataMetadata",
+      'pinataMetadata',
       JSON.stringify({
         name: folderName,
-      })
+      }),
     );
     const {
       data: { IpfsHash: cid },
-    } = await axios.post(PINATA_API_PINFILETOIPFS, formData, {
-      maxBodyLength: "Infinity",
+    } = await post(PINATA_API_PINFILETOIPFS, formData, {
+      maxBodyLength: 'Infinity',
       headers: {
-        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        // eslint-disable-next-line no-underscore-dangle
+        'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
         pinata_api_key: PINATA_API_KEY,
         pinata_secret_api_key: PINATA_API_SECRET,
       },
     });
-    fs.outputJsonSync(outputPath, { [folderName]: cid });
-  } catch (error) {
-    console.error(error);
+    outputJsonSync(outputPath, { [folderName]: cid });
+  } catch (err) {
+    error(err);
     process.exit(1);
   }
 })();

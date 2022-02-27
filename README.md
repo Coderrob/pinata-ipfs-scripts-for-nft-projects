@@ -17,19 +17,19 @@ The scripts contained in this repository were created to help automate the impor
 Clone the repository.
 
 ```bash
->_ git clone https://github.com/Coderrob/pinata-ipfs-scripts-for-nft-projects.git
+git clone https://github.com/Coderrob/pinata-ipfs-scripts-for-nft-projects.git
 ```
 
 Change directory to the `pinata-ipfs-scripts-for-nft-projects` folder.
 
 ```bash
->_ cd pinata-ipfs-scripts-for-nft-projects
+cd pinata-ipfs-scripts-for-nft-projects
 ```
 
 Install dependencies.
 
 ```bash
->_ npm install
+npm install
 ```
 
 Some scripts require environment variables to connect with the [Pinata API](https://docs.pinata.cloud/). These environment variables are needed to download pinned files, or to upload files and folders.

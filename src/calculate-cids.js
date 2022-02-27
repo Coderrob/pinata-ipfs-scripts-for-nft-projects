@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Rob (Coderrob) Lindley
+Copyright (c) 2022 Rob (Coderrob) Lindley
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,13 @@ SOFTWARE.
 
 */
 
-const { getFileName } = require("./utils.js");
-const fs = require("fs-extra");
-const Bottleneck = require("bottleneck");
-const Hash = require("ipfs-only-hash");
-const recursive = require("recursive-fs");
+import { readFileSync, outputJsonSync } from 'fs-extra';
+import Bottleneck from 'bottleneck';
+import { of } from 'ipfs-only-hash';
+import { read } from 'recursive-fs';
+import { getFileName } from './utils';
+
+const { log, error } = console;
 
 (async () => {
   const rateLimiter = new Bottleneck({
@@ -35,26 +37,27 @@ const recursive = require("recursive-fs");
   });
 
   try {
-    const outputPath = "./output/file-cids.json";
-    const folderPath = "files";
+    const outputPath = './output/file-cids.json';
+    const folderPath = 'files';
     const cidMapping = {};
-    const { files } = await recursive.read(folderPath);
+    const { files } = await read(folderPath);
     if (files?.length <= 0) {
-      console.info("No files were found in folder path.");
+      log(`No files were found in folder '${folderPath}'`);
       return;
     }
     await Promise.all(
-      files.map((filePath) =>
-        rateLimiter.schedule(async () => {
-          const fileName = getFileName(filePath);
-          const fileData = fs.readFileSync(filePath);
-          cidMapping[fileName] = await Hash.of(fileData);
-        })
-      )
+      files.map((filePath) => rateLimiter.schedule(async () => {
+        const fileName = getFileName(filePath);
+        log(`${fileName} hash started`);
+        const fileData = readFileSync(filePath);
+        const fileHash = await of(fileData);
+        log(`${fileName} CID: ${fileHash}`);
+        cidMapping[fileName] = fileHash;
+      })),
     );
-    fs.outputJsonSync(outputPath, cidMapping);
-  } catch (error) {
-    console.error(error);
+    outputJsonSync(outputPath, cidMapping);
+  } catch (err) {
+    error(err);
     process.exit(1);
   }
 })();

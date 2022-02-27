@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Rob (Coderrob) Lindley
+Copyright (c) 2022 Rob (Coderrob) Lindley
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,14 @@ SOFTWARE.
 
 */
 
-require("dotenv").config();
+require('dotenv').config();
+
 const { PINATA_API_KEY, PINATA_API_SECRET } = process.env;
-const { FileStatus, MAX_PAGE_LIMIT } = require("./utils.js");
-const fs = require("fs-extra");
-const pinataSDK = require("@pinata/sdk");
+const fs = require('fs-extra');
+const pinataSDK = require('@pinata/sdk');
+const { PinSatus, MAX_PAGE_LIMIT } = require('./utils');
+
+const { log, error } = console;
 
 (async () => {
   const pinata = pinataSDK(PINATA_API_KEY, PINATA_API_SECRET);
@@ -36,13 +39,13 @@ const pinataSDK = require("@pinata/sdk");
    * Get a page of results from Pinata of all pinned files mapped with IPFS CIDs.
    *
    * @param {number} pageOffset the page index of the results to return. Defaults to 0.
-   * @param {number} pageLimit the limit to number of results to return. Maximum is 1000. Default is 5.
+   * @param {number} pageLimit the limit to number of results to return. Max of 1000. Default of 5.
    * @return {object} returns an object containing file name mapped to its IPFS hash.
    *
    */
   const getFileCIDMappings = async (pageOffset, pageLimit) => {
     const filter = {
-      status: FileStatus.PINNED,
+      status: PinSatus.PINNED,
       pageLimit,
       pageOffset,
     };
@@ -65,23 +68,24 @@ const pinataSDK = require("@pinata/sdk");
   };
 
   try {
-    const outputPath = "./output/downloaded-cids.json";
+    const outputPath = './output/downloaded-cids.json';
     let pageOffset = 0;
     let cidMapping = {};
     let hasMappings = true;
     while (hasMappings) {
+      // eslint-disable-next-line no-await-in-loop
       const fileMapping = await getFileCIDMappings(pageOffset, MAX_PAGE_LIMIT);
       cidMapping = { ...fileMapping };
       pageOffset += 1;
       hasMappings = fileMapping?.length > 0;
     }
     if (Object.keys(cidMapping).length <= 0) {
-      console.info("No pinned files were found.");
+      log('No pinned files were found');
       return;
     }
     fs.outputJsonSync(outputPath, cidMapping);
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    error(err);
     process.exit(1);
   }
 })();

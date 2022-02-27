@@ -17,13 +17,13 @@ The scripts contained in this repository were created to help automate the impor
 Clone the repository.
 
 ```bash
->_ git clone https://github.com/Coderrob/nft-pinata-bulk-upload.git
+>_ git clone https://github.com/Coderrob/pinata-ipfs-scripts-for-nft-projects.git
 ```
 
-Change directory to the `nft-pinata-bulk-upload` folder.
+Change directory to the `pinata-ipfs-scripts-for-nft-projects` folder.
 
 ```bash
->_ cd nft-pinata-bulk-upload
+>_ cd pinata-ipfs-scripts-for-nft-projects
 ```
 
 Install dependencies.

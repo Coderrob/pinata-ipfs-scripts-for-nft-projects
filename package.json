@@ -21,9 +21,9 @@
     "url": "https://github.com/Coderrob/nft-pinata-bulk-upload/issues"
   },
   "homepage": "https://github.com/Coderrob/nft-pinata-bulk-upload#readme",
-  "devDependencies": {
-    "axios": "^0.24.0",
+  "dependencies": {
     "@pinata/sdk": "^1.1.23",
+    "axios": "^0.24.0",
     "base-path-converter": "^1.0.2",
     "bottleneck": "^2.19.5",
     "dotenv": "^10.0.0",
@@ -32,5 +32,9 @@
     "ipfs-only-hash": "^4.0.0",
     "recursive-fs": "^2.1.0"
   },
-  "dependencies": {}
+  "devDependencies": {
+    "eslint": "^8.10.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4"
+  }
 }

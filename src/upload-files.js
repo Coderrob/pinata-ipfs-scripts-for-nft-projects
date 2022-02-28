@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Rob (Coderrob) Lindley
+Copyright (c) 2022 Rob (Coderrob) Lindley
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,20 +23,23 @@ SOFTWARE.
 
 */
 
-require("dotenv").config();
+require('dotenv').config();
+
 const { PINATA_API_KEY, PINATA_API_SECRET } = process.env;
-const { getFileName } = require("./utils.js");
-const fs = require("fs-extra");
-const recursive = require("recursive-fs");
-const Bottleneck = require("bottleneck");
-const pinataSDK = require("@pinata/sdk");
+const fs = require('fs-extra');
+const recursive = require('recursive-fs');
+const Bottleneck = require('bottleneck');
+const pinataSDK = require('@pinata/sdk');
+const { getFileName } = require('./utils');
+
+const { log, error } = console;
 
 (async () => {
   /**
    * Load any existing file CID mappings to avoid attempting to upload
    * a file that may have already been uploaded and the CID is known.
    */
-  const pinataCIDs = fs.readJsonSync("./output/downloaded-cids.json") ?? {};
+  const pinataCIDs = fs.readJsonSync('./output/downloaded-cids.json') || {};
   const pinata = pinataSDK(PINATA_API_KEY, PINATA_API_SECRET);
 
   /**
@@ -58,12 +61,10 @@ const pinataSDK = require("@pinata/sdk");
    * @param {string} fileName the file name to check for existing CIDs
    * @return {bool} returns true if the file has already been mapped; otherwise false
    */
-  const cidExists = (fileName) => {
-    return {
-      exists: !!pinataCIDs[fileName],
-      ipfsHash: pinataCIDs[fileName],
-    };
-  };
+  const cidExists = (fileName) => ({
+    exists: !!pinataCIDs[fileName],
+    ipfsHash: pinataCIDs[fileName],
+  });
 
   /**
    * Upload a file's data to Pinata and provide a metadata name for the file.
@@ -77,8 +78,10 @@ const pinataSDK = require("@pinata/sdk");
   const uploadFile = async (fileName, filePath) => {
     const { exists, ipfsHash } = cidExists(fileName);
     if (exists) {
+      log(`File '${fileName}' already exists; CID: ${ipfsHash}`);
       return ipfsHash;
     }
+    log(`'${fileName}' upload started`);
     const { IpfsHash } = await pinata.pinFileToIPFS(
       fs.createReadStream(filePath),
       {
@@ -88,31 +91,30 @@ const pinataSDK = require("@pinata/sdk");
         pinataOptions: {
           cidVersion: 0,
         },
-      }
+      },
     );
+    log(`'${fileName}' upload complete; CID: ${IpfsHash}`);
     return IpfsHash;
   };
 
   try {
-    const outputPath = "./output/uploaded-cids.json";
-    const folderPath = "files";
+    const OUTPUT_PATH = './output/uploaded-cids.json';
+    const FOLDER_PATH = 'files'; // Folder containing files to upload
     const cidMapping = {};
-    const { files } = await recursive.read(folderPath);
-    if (files?.length <= 0) {
-      console.info("No files were found in folder path.");
+    const { files } = await recursive.read(FOLDER_PATH);
+    if ((files && files.length) <= 0) {
+      log(`No files were found in folder '${FOLDER_PATH}'`);
       return;
     }
     await Promise.all(
       files.map(async (filePath) => {
         const fileName = getFileName(filePath);
-        cidMapping[fileName] = await rateLimiter.schedule(() =>
-          uploadFile(fileName, filePath)
-        );
-      })
+        cidMapping[fileName] = await rateLimiter.schedule(() => uploadFile(fileName, filePath));
+      }),
     );
-    fs.outputJsonSync(outputPath, cidMapping);
-  } catch (error) {
-    console.error(error);
+    fs.outputJsonSync(OUTPUT_PATH, cidMapping);
+  } catch (err) {
+    error(err);
     process.exit(1);
   }
 })();

@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Rob (Coderrob) Lindley
+Copyright (c) 2022 Rob (Coderrob) Lindley
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,13 @@ SOFTWARE.
 
 */
 
-const { getFileName } = require("./utils.js");
-const fs = require("fs-extra");
-const Bottleneck = require("bottleneck");
-const Hash = require("ipfs-only-hash");
-const recursive = require("recursive-fs");
+const { readFileSync, outputJsonSync } = require('fs-extra');
+const Bottleneck = require('bottleneck');
+const { of } = require('ipfs-only-hash');
+const { read } = require('recursive-fs');
+const { getFileName } = require('./utils');
+
+const { log, error } = console;
 
 (async () => {
   const rateLimiter = new Bottleneck({
@@ -35,26 +37,27 @@ const recursive = require("recursive-fs");
   });
 
   try {
-    const outputPath = "./output/file-cids.json";
-    const folderPath = "files";
+    const OUTPUT_PATH = './output/file-cids.json';
+    const FOLDER_PATH = 'files';
     const cidMapping = {};
-    const { files } = await recursive.read(folderPath);
-    if (files?.length <= 0) {
-      console.info("No files were found in folder path.");
+    const { files } = await read(FOLDER_PATH);
+    if ((files && files.length) <= 0) {
+      log(`No files were found in folder '${FOLDER_PATH}'`);
       return;
     }
     await Promise.all(
-      files.map((filePath) =>
-        rateLimiter.schedule(async () => {
-          const fileName = getFileName(filePath);
-          const fileData = fs.readFileSync(filePath);
-          cidMapping[fileName] = await Hash.of(fileData);
-        })
-      )
+      files.map((filePath) => rateLimiter.schedule(async () => {
+        const fileName = getFileName(filePath);
+        log(`${fileName} hashing started`);
+        const fileData = readFileSync(filePath);
+        const fileHash = await of(fileData);
+        log(`${fileName} CID: ${fileHash}`);
+        cidMapping[fileName] = fileHash;
+      })),
     );
-    fs.outputJsonSync(outputPath, cidMapping);
-  } catch (error) {
-    console.error(error);
+    outputJsonSync(OUTPUT_PATH, cidMapping);
+  } catch (err) {
+    error(err);
     process.exit(1);
   }
 })();

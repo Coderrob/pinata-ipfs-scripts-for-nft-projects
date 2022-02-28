@@ -23,11 +23,11 @@ SOFTWARE.
 
 */
 
-import { readFileSync, outputJsonSync } from 'fs-extra';
-import Bottleneck from 'bottleneck';
-import { of } from 'ipfs-only-hash';
-import { read } from 'recursive-fs';
-import { getFileName } from './utils';
+const { readFileSync, outputJsonSync } = require('fs-extra');
+const Bottleneck = require('bottleneck');
+const { of } = require('ipfs-only-hash');
+const { read } = require('recursive-fs');
+const { getFileName } = require('./utils');
 
 const { log, error } = console;
 
@@ -37,25 +37,27 @@ const { log, error } = console;
   });
 
   try {
-    const outputPath = './output/file-cids.json';
-    const folderPath = 'files';
+    const OUTPUT_PATH = './output/file-cids.json';
+    const FOLDER_PATH = 'files';
     const cidMapping = {};
-    const { files } = await read(folderPath);
-    if (files?.length <= 0) {
-      log(`No files were found in folder '${folderPath}'`);
+    const { files } = await read(FOLDER_PATH);
+    if ((files && files.length) <= 0) {
+      log(`No files were found in folder '${FOLDER_PATH}'`);
       return;
     }
     await Promise.all(
-      files.map((filePath) => rateLimiter.schedule(async () => {
-        const fileName = getFileName(filePath);
-        log(`${fileName} hash started`);
-        const fileData = readFileSync(filePath);
-        const fileHash = await of(fileData);
-        log(`${fileName} CID: ${fileHash}`);
-        cidMapping[fileName] = fileHash;
-      })),
+      files.map((filePath) =>
+        rateLimiter.schedule(async () => {
+          const fileName = getFileName(filePath);
+          log(`${fileName} hashing started`);
+          const fileData = readFileSync(filePath);
+          const fileHash = await of(fileData);
+          log(`${fileName} CID: ${fileHash}`);
+          cidMapping[fileName] = fileHash;
+        })
+      )
     );
-    outputJsonSync(outputPath, cidMapping);
+    outputJsonSync(OUTPUT_PATH, cidMapping);
   } catch (err) {
     error(err);
     process.exit(1);

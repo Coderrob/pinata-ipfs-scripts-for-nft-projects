@@ -63,9 +63,9 @@ Once complete the script will output the file name and CID mappings to a file.
 
 #### Settings
 
-`var: outputPath` - The relative output file path. Defaulted to `./output/file-cids.json`.
+`var: OUTPUT_PATH` - The relative output file path. Defaulted to `./output/file-cids.json`.
 
-`var: folderPath` - The relative folder path containing the files to be processed. Each file will have its name and CID mapped. Defaulted to the `files` folder.
+`var: FOLDER_PATH` - The relative folder path containing the files to be processed. Each file will have its name and CID mapped. Defaulted to the `files` folder.
 
 #### Command
 
@@ -96,9 +96,9 @@ Once complete the script will output the file name and sha256 hash mappings to a
 
 #### Settings
 
-`var: outputPath` - The relative output file path. Defaulted to `./output/file-hashes.json`.
+`var: OUTPUT_PATH` - The relative output file path. Defaulted to `./output/file-hashes.json`.
 
-`var: folderPath` - The relative folder path containing the files to be processed. Each file will have its name and CIDsha256 hash mapped. Defaulted to the `files` folder.
+`var: FOLDER_PATH` - The relative folder path containing the files to be processed. Each file will have its name and CIDsha256 hash mapped. Defaulted to the `files` folder.
 
 #### Command
 
@@ -129,7 +129,7 @@ Once complete the script will output the file name and CID mappings to a file.
 
 #### Settings
 
-`var: outputPath` - The relative output file path. Defaulted to `./output/downloaded-cids.json`
+`var: OUTPUT_PATH` - The relative output file path. Defaulted to `./output/downloaded-cids.json`
 
 `env: PINATA_API_KEY` - The Pinata API Key environment value
 
@@ -166,9 +166,9 @@ Once complete the script will output the file name and CID mappings to a file.
 
 `var: pinataCIDs` - To prevent re-uploading already pinned files in Pinata. This variable is loaded with the json contents of the `./ouput/downloaded-cids.json` file if one exists. These CID mappings will help prevent re-uploading a file that has already been pinned in Pinata.
 
-`var: outputPath` - The relative output file path. Defaulted to `./output/uploaded-cids.json`.
+`var: OUTPUT_PATH` - The relative output file path. Defaulted to `./output/uploaded-cids.json`.
 
-`var: folderPath` - The relative folder path to read and upload all local files to be pinned with Pinata.  Defaulted to the `files` folder.
+`var: FOLDER_PATH` - The relative folder path to read and upload all local files to be pinned with Pinata.  Defaulted to the `files` folder.
 
 `env: PINATA_API_KEY` - The Pinata API Key environment value
 
@@ -211,11 +211,11 @@ Once complete the script will output the folder name and CID mapping to a file.
 
 #### Settings
 
-`var: outputPath` - The relative output file path. Defaulted to `./output/folder-cid.json`.
+`var: OUTPUT_PATH` - The relative output file path. Defaulted to `./output/folder-cid.json`.
 
-`var: folderName` - The folder name to use for the uploaded folder of json metadata. This can be changed to any name you'd like that identifies the collection of metadata files.  Defaulted to `metadata` as the folder name.
+`var: FOLDER_NAME` - The folder name to use for the uploaded folder of json metadata. This can be changed to any name you'd like that identifies the collection of metadata files.  Defaulted to `metadata` as the folder name.
 
-`var: folderPath` - The relative folder path to read and upload all local files to be pinned in Pinata as a folder container for the uploaded files. Defaulted to the `metadata` folder.
+`var: FOLDER_PATH` - The relative folder path to read and upload all local files to be pinned in Pinata as a folder container for the uploaded files. Defaulted to the `metadata` folder.
 
 `env: PINATA_API_KEY` - The Pinata API Key environment value
 

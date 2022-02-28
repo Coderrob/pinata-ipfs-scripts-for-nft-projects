@@ -39,7 +39,7 @@ const { log, error } = console;
    * Load any existing file CID mappings to avoid attempting to upload
    * a file that may have already been uploaded and the CID is known.
    */
-  const pinataCIDs = fs.readJsonSync('./output/downloaded-cids.json') ?? {};
+  const pinataCIDs = fs.readJsonSync('./output/downloaded-cids.json') || {};
   const pinata = pinataSDK(PINATA_API_KEY, PINATA_API_SECRET);
 
   /**
@@ -78,10 +78,10 @@ const { log, error } = console;
   const uploadFile = async (fileName, filePath) => {
     const { exists, ipfsHash } = cidExists(fileName);
     if (exists) {
-      log(`${fileName} already exists; IPFS Hash: ${ipfsHash}`);
+      log(`File '${fileName}' already exists; CID: ${ipfsHash}`);
       return ipfsHash;
     }
-    log(`${fileName} upload starting`);
+    log(`'${fileName}' upload started`);
     const { IpfsHash } = await pinata.pinFileToIPFS(
       fs.createReadStream(filePath),
       {
@@ -91,28 +91,30 @@ const { log, error } = console;
         pinataOptions: {
           cidVersion: 0,
         },
-      },
+      }
     );
-    log(`${fileName} upload complete; IPFS Hash: ${IpfsHash}`);
+    log(`'${fileName}' upload complete; CID: ${IpfsHash}`);
     return IpfsHash;
   };
 
   try {
-    const outputPath = './output/uploaded-cids.json';
-    const folderPath = 'files';
+    const OUTPUT_PATH = './output/uploaded-cids.json';
+    const FOLDER_PATH = 'files'; // Folder containing files to upload
     const cidMapping = {};
-    const { files } = await recursive.read(folderPath);
-    if (files?.length <= 0) {
-      log(`No files were found in folder '${folderPath}'`);
+    const { files } = await recursive.read(FOLDER_PATH);
+    if ((files && files.length) <= 0) {
+      log(`No files were found in folder '${FOLDER_PATH}'`);
       return;
     }
     await Promise.all(
       files.map(async (filePath) => {
         const fileName = getFileName(filePath);
-        cidMapping[fileName] = await rateLimiter.schedule(() => uploadFile(fileName, filePath));
-      }),
+        cidMapping[fileName] = await rateLimiter.schedule(() =>
+          uploadFile(fileName, filePath)
+        );
+      })
     );
-    fs.outputJsonSync(outputPath, cidMapping);
+    fs.outputJsonSync(OUTPUT_PATH, cidMapping);
   } catch (err) {
     error(err);
     process.exit(1);

@@ -23,11 +23,11 @@ SOFTWARE.
 
 */
 
-import { readFileSync, outputJsonSync } from 'fs-extra';
-import Bottleneck from 'bottleneck';
-import { createHash } from 'crypto';
-import { read } from 'recursive-fs';
-import { getFileName } from './utils';
+const { readFileSync, outputJsonSync } = require('fs-extra');
+const Bottleneck = require('bottleneck');
+const { createHash } = require('crypto');
+const { read } = require('recursive-fs');
+const { getFileName } = require('./utils');
 
 const { log, error } = console;
 
@@ -37,27 +37,27 @@ const { log, error } = console;
   });
 
   try {
-    const outputPath = './output/file-hashes.json';
-    const folderPath = 'files';
+    const OUTPUT_PATH = './output/file-hashes.json';
+    const FOLDER_PATH = 'files';
     const hashMapping = {};
-    const { files } = await read(folderPath);
-    if (files?.length <= 0) {
-      log(`No files were found in folder '${folderPath}'`);
+    const { files } = await read(FOLDER_PATH);
+    if ((files && files.length) <= 0) {
+      log(`No files were found in folder '${FOLDER_PATH}'`);
       return;
     }
     await Promise.all(
-      files.map((filePath) => rateLimiter.schedule(() => {
-        const fileName = getFileName(filePath);
-        log(`${fileName} hash started`);
-        const fileData = readFileSync(filePath);
-        const fileHash = createHash('sha256')
-          .update(fileData)
-          .digest('hex');
-        log(`${fileName} sha256: ${fileHash}`);
-        hashMapping[fileName] = fileHash;
-      })),
+      files.map((filePath) =>
+        rateLimiter.schedule(() => {
+          const fileName = getFileName(filePath);
+          log(`${fileName} hashing started`);
+          const fileData = readFileSync(filePath);
+          const fileHash = createHash('sha256').update(fileData).digest('hex');
+          log(`${fileName} SHA-256: ${fileHash}`);
+          hashMapping[fileName] = fileHash;
+        })
+      )
     );
-    outputJsonSync(outputPath, hashMapping);
+    outputJsonSync(OUTPUT_PATH, hashMapping);
   } catch (err) {
     error(err);
     process.exit(1);

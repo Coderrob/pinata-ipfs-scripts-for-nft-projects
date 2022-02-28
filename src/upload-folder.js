@@ -23,11 +23,11 @@ SOFTWARE.
 
 */
 
-import { post } from 'axios';
-import { createReadStream, outputJsonSync } from 'fs-extra';
-import { read } from 'recursive-fs';
-import FormData from 'form-data';
-import basePathConverter from 'base-path-converter';
+const { post } = require('axios');
+const { outputJsonSync } = require('fs-extra');
+const { read } = require('recursive-fs');
+const FormData = require('form-data');
+const basePathConverter = require('base-path-converter');
 
 require('dotenv').config();
 
@@ -39,25 +39,26 @@ const PINATA_API_PINFILETOIPFS = 'https://api.pinata.cloud/pinning/pinFileToIPFS
 
 (async () => {
   try {
-    const outputPath = './output/folder-cid.json';
-    const folderName = 'metadata';
-    const folderPath = 'metadata';
-    const { files } = await read(folderPath);
-    if (files?.length <= 0) {
-      log(`No files were found in folder '${folderPath}'`);
+    const OUTPUT_PATH = './output/folder-cid.json';
+    const FOLDER_NAME = 'metadata'; // Display name of folder in Pinata
+    const FOLDER_PATH = 'metadata'; // Folder to be uploaded
+    const { files } = await read(FOLDER_PATH);
+    if ((files && files.length) <= 0) {
+      log(`No files were found in folder '${FOLDER_PATH}'`);
       return;
     }
+    log(`'${FOLDER_PATH}' upload started`);
     const formData = new FormData();
     files.forEach((filePath) => {
-      log(`Appending file: ${filePath}`);
+      log(`Adding file: ${filePath}`);
       formData.append('file', createReadStream(filePath), {
-        filepath: basePathConverter(folderPath, filePath),
+        filepath: basePathConverter(FOLDER_PATH, filePath),
       });
     });
     formData.append(
       'pinataMetadata',
       JSON.stringify({
-        name: folderName,
+        name: FOLDER_NAME,
       }),
     );
     const {
@@ -71,7 +72,8 @@ const PINATA_API_PINFILETOIPFS = 'https://api.pinata.cloud/pinning/pinFileToIPFS
         pinata_secret_api_key: PINATA_API_SECRET,
       },
     });
-    outputJsonSync(outputPath, { [folderName]: cid });
+    log(`'${FOLDER_PATH}' upload complete; CID: ${cid}`);
+    outputJsonSync(OUTPUT_PATH, { [FOLDER_NAME]: cid });
   } catch (err) {
     error(err);
     process.exit(1);

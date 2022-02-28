@@ -24,7 +24,7 @@ SOFTWARE.
 */
 
 const { post } = require('axios');
-const { outputJsonSync } = require('fs-extra');
+const { createReadStream, outputJsonSync } = require('fs-extra');
 const { read } = require('recursive-fs');
 const FormData = require('form-data');
 const basePathConverter = require('base-path-converter');

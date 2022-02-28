@@ -46,16 +46,14 @@ const { log, error } = console;
       return;
     }
     await Promise.all(
-      files.map((filePath) =>
-        rateLimiter.schedule(() => {
-          const fileName = getFileName(filePath);
-          log(`${fileName} hashing started`);
-          const fileData = readFileSync(filePath);
-          const fileHash = createHash('sha256').update(fileData).digest('hex');
-          log(`${fileName} SHA-256: ${fileHash}`);
-          hashMapping[fileName] = fileHash;
-        })
-      )
+      files.map((filePath) => rateLimiter.schedule(() => {
+        const fileName = getFileName(filePath);
+        log(`${fileName} hashing started`);
+        const fileData = readFileSync(filePath);
+        const fileHash = createHash('sha256').update(fileData).digest('hex');
+        log(`${fileName} SHA-256: ${fileHash}`);
+        hashMapping[fileName] = fileHash;
+      })),
     );
     outputJsonSync(OUTPUT_PATH, hashMapping);
   } catch (err) {

@@ -91,7 +91,7 @@ const { log, error } = console;
         pinataOptions: {
           cidVersion: 0,
         },
-      }
+      },
     );
     log(`'${fileName}' upload complete; CID: ${IpfsHash}`);
     return IpfsHash;
@@ -109,10 +109,8 @@ const { log, error } = console;
     await Promise.all(
       files.map(async (filePath) => {
         const fileName = getFileName(filePath);
-        cidMapping[fileName] = await rateLimiter.schedule(() =>
-          uploadFile(fileName, filePath)
-        );
-      })
+        cidMapping[fileName] = await rateLimiter.schedule(() => uploadFile(fileName, filePath));
+      }),
     );
     fs.outputJsonSync(OUTPUT_PATH, cidMapping);
   } catch (err) {

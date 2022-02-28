@@ -42,4 +42,4 @@ const PinSatus = {
 module.exports = {
   getFileName,
   PinSatus,
-}
+};

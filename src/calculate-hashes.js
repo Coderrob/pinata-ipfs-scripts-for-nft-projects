@@ -55,7 +55,17 @@ const { log, error } = console;
         hashMapping[fileName] = fileHash;
       })),
     );
-    outputJsonSync(OUTPUT_PATH, hashMapping);
+
+    // Sorting for the resultant object
+    const sortObject = (obj) => Object.keys(obj)
+      .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))
+      .reduce((accumulator, key) => {
+        accumulator[key] = obj[key];
+
+        return accumulator;
+      }, {});
+
+    outputJsonSync(OUTPUT_PATH, sortObject(hashMapping));
   } catch (err) {
     error(err);
     process.exit(1);

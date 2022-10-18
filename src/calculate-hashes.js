@@ -38,6 +38,7 @@ const { log, error } = console;
 
   try {
     const OUTPUT_PATH = './output/file-hashes.json';
+    const FINAL_OUTPUT_PATH = './output/file-hashOfHashes.json';
     const FOLDER_PATH = 'files';
     const hashMapping = {};
     const { files } = await read(FOLDER_PATH);
@@ -73,6 +74,7 @@ const { log, error } = console;
     log('Concatenated String ->', concatenatedStr);
     const fileHash = createHash('sha256').update(concatenatedStr).digest('hex');
     log('Final Hash ->', fileHash);
+    outputJsonSync(FINAL_OUTPUT_PATH, fileHash)
 
   } catch (err) {
     error(err);

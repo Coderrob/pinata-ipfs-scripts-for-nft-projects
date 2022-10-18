@@ -66,6 +66,14 @@ const { log, error } = console;
       }, {});
 
     outputJsonSync(OUTPUT_PATH, sortObject(hashMapping));
+
+    // Outputs Hash of hashes
+    const hashes = require('../output/file-hashes.json');
+    const concatenatedStr = Object.values(hashes).join('');
+    log('Concatenated String ->', concatenatedStr);
+    const fileHash = createHash('sha256').update(concatenatedStr).digest('hex');
+    log('Final Hash ->', fileHash);
+
   } catch (err) {
     error(err);
     process.exit(1);

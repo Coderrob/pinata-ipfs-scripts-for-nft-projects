@@ -55,7 +55,17 @@ const { log, error } = console;
         cidMapping[fileName] = fileHash;
       })),
     );
-    outputJsonSync(OUTPUT_PATH, cidMapping);
+
+    // Sorting for the resultant object
+    const sortObject = (obj) => Object.keys(obj)
+      .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))
+      .reduce((accumulator, key) => {
+        accumulator[key] = obj[key];
+
+        return accumulator;
+      }, {});
+
+    outputJsonSync(OUTPUT_PATH, sortObject(cidMapping));
   } catch (err) {
     error(err);
     process.exit(1);

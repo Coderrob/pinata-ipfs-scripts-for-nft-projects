@@ -38,6 +38,7 @@ const { log, error } = console;
 
   try {
     const OUTPUT_PATH = './output/file-hashes.json';
+    const FINAL_OUTPUT_PATH = './output/file-hashOfHashes.json';
     const FOLDER_PATH = 'files';
     const hashMapping = {};
     const { files } = await read(FOLDER_PATH);
@@ -55,7 +56,26 @@ const { log, error } = console;
         hashMapping[fileName] = fileHash;
       })),
     );
-    outputJsonSync(OUTPUT_PATH, hashMapping);
+
+    // Sorting for the resultant object
+    const sortObject = (obj) => Object.keys(obj)
+      .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))
+      .reduce((accumulator, key) => {
+        accumulator[key] = obj[key];
+
+        return accumulator;
+      }, {});
+
+    outputJsonSync(OUTPUT_PATH, sortObject(hashMapping));
+
+    // Outputs Hash of hashes
+    const hashes = require('../output/file-hashes.json');
+    const concatenatedStr = Object.values(hashes).join('');
+    log('Concatenated String ->', concatenatedStr);
+    const fileHash = createHash('sha256').update(concatenatedStr).digest('hex');
+    log('Final Hash ->', fileHash);
+    outputJsonSync(FINAL_OUTPUT_PATH, fileHash)
+
   } catch (err) {
     error(err);
     process.exit(1);

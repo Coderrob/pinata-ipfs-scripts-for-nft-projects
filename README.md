@@ -224,7 +224,7 @@ Once complete the script will output the folder name and CID mapping to a file.
 #### Command
 
 ```bash
-node ./src/upload-metadata.js
+node ./src/upload-folder.js
 ```
 
 #### Output

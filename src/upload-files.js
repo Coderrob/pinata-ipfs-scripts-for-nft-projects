@@ -76,11 +76,6 @@ const { log, error } = console;
    * @return {string} returns the IPFS hash (CID) for the uploaded file
    */
   const uploadFile = async (fileName, filePath) => {
-    const { exists, ipfsHash } = cidExists(fileName);
-    if (exists) {
-      log(`File '${fileName}' already exists; CID: ${ipfsHash}`);
-      return ipfsHash;
-    }
     log(`'${fileName}' upload started`);
     const { IpfsHash } = await pinata.pinFileToIPFS(
       fs.createReadStream(filePath),
@@ -109,7 +104,13 @@ const { log, error } = console;
     await Promise.all(
       files.map(async (filePath) => {
         const fileName = getFileName(filePath);
-        cidMapping[fileName] = await rateLimiter.schedule(() => uploadFile(fileName, filePath));
+        const { exists, ipfsHash } = cidExists(fileName);
+        if (exists) {
+          log(`File '${fileName}' already exists; CID: ${ipfsHash}`);
+          cidMapping[fileName] = ipfsHash;
+        } else {
+          cidMapping[fileName] = await rateLimiter.schedule(() => uploadFile(fileName, filePath));
+        }
       }),
     );
     fs.outputJsonSync(OUTPUT_PATH, cidMapping);

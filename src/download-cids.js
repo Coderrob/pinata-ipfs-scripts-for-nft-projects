@@ -93,7 +93,7 @@ const { log, table: logTable, error } = console;
       }
       cidMappings = { ...cidMappings, ...mapping };
       hasMoreResults = count >= MAX_PAGE_LIMIT;
-      pageOffset += 1;
+      pageOffset += count;
       totalCount += count;
     }
     if (totalCount <= 0) {

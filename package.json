@@ -23,7 +23,7 @@
   "homepage": "https://github.com/Coderrob/nft-pinata-bulk-upload#readme",
   "dependencies": {
     "@pinata/sdk": "^1.1.23",
-    "axios": "^0.24.0",
+    "axios": "^0.28.0",
     "base-path-converter": "^1.0.2",
     "bottleneck": "^2.19.5",
     "dotenv": "^10.0.0",

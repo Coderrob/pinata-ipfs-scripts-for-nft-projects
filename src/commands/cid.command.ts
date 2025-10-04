@@ -5,10 +5,11 @@
 
 import { Command } from 'commander';
 
+import { OutputPaths } from '../config/output-paths';
 import { CIDProcessor } from '../core';
 import { CommandOptions } from '../types';
 import { BaseCommand } from './base.command';
-import { DefaultOutputs, OptionGroups } from './options';
+import { OptionGroups } from './options';
 
 export class CIDCommand extends BaseCommand {
   constructor() {
@@ -18,13 +19,10 @@ export class CIDCommand extends BaseCommand {
   public configure(program: Command): void {
     const command = program.command('cid').description('Calculate IPFS CIDs for files in a folder');
 
-    // Add reusable options
-    OptionGroups.batchProcessing.forEach(option => {
+    // Add reusable options with default output path
+    OptionGroups.batchProcessing(OutputPaths.FILES.fileCids).forEach(option => {
       command.addOption(option);
     });
-
-    // Set default for output if not specified
-    command.option('-o, --output <path>', 'Output path for CID results', DefaultOutputs.fileCids);
 
     command.action(async (options: CommandOptions) => {
       await this.execute(options);

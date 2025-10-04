@@ -5,6 +5,7 @@
 
 import { Command } from 'commander';
 
+import { OutputPaths } from '../config/output-paths';
 import { HashProcessor } from '../core';
 import { CommandOptions } from '../types';
 import { BaseCommand } from './base.command';
@@ -21,8 +22,7 @@ export class HashCommand extends BaseCommand {
 
   public configure(program: Command): void {
     const command = new CommandBuilder('hash', 'Calculate SHA-256 hashes for files in a folder (v2)')
-      .addHashCalculationOptions()
-      .setDefaultOutput('fileHashes')
+      .addHashCalculationOptions(OutputPaths.FILES.fileHashes)
       .setAction(async (...args: unknown[]) => {
         const options = (args[0] ?? {}) as CommandOptions & { finalOutput?: string };
         await this.execute(options);

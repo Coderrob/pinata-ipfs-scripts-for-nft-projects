@@ -3,7 +3,7 @@
  * Copyright (c) 2025 Robert (Coderrob) Lindley
  */
 
-import { LogContext, LogEntry, LogLevel, PerformanceMetrics } from './types';
+import { LogContext, LogEntry, LogLevel, PerformanceMetrics } from '../types';
 
 /**
  * Enhanced logger with structured logging and observability features

@@ -6,4 +6,4 @@
 export { PathOptions } from './path.options';
 export { RateLimitOptions } from './rate-limit.options';
 export { PinataOptions } from './pinata.options';
-export { OptionGroups, DefaultOutputs } from './option-groups';
+export { OptionGroups } from './option-groups';

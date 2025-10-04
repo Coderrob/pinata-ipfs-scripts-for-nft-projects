@@ -3,8 +3,8 @@
  * Copyright (c) 2025 Robert (Coderrob) Lindley
  */
 
-import { StructuredLogger } from './structured-logger';
-import { HealthCheckResult, HealthStatus, PerformanceMetrics } from './types';
+import { HealthCheckResult, HealthStatus, PerformanceMetrics } from '../types';
+import { StructuredLogger } from './structured.logger';
 
 /**
  * Metrics collector for operational observability

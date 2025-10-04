@@ -5,11 +5,12 @@
 
 import { Command } from 'commander';
 
+import { OutputPaths } from '../config/output-paths';
 import { FileUploadProcessor } from '../core';
 import { CommandOptions, UploadResult } from '../types';
 import { isFailure } from '../utils';
 import { BaseCommand } from './base.command';
-import { DefaultOutputs, OptionGroups } from './options';
+import { OptionGroups } from './options';
 
 export class UploadFilesCommand extends BaseCommand {
   constructor() {
@@ -19,13 +20,10 @@ export class UploadFilesCommand extends BaseCommand {
   public configure(program: Command): void {
     const command = program.command('upload-files').description('Upload individual files to Pinata IPFS');
 
-    // Add reusable options
-    OptionGroups.uploadFiles.forEach(option => {
+    // Add reusable options with default output path
+    OptionGroups.uploadFiles(OutputPaths.FILES.uploadedFiles).forEach(option => {
       command.addOption(option);
     });
-
-    // Set default for output if not specified
-    command.option('-o, --output <path>', 'Output path for upload results', DefaultOutputs.uploadedFiles);
 
     command.action(async (...args: unknown[]) => {
       const options = (args[0] ?? {}) as CommandOptions;
@@ -77,10 +75,7 @@ export class UploadFilesCommand extends BaseCommand {
    * @param rateLimitConfig - Rate limiting configuration.
    * @returns Processing options ready for execution.
    */
-  private buildProcessingOptions(
-    options: CommandOptions,
-    rateLimitConfig: { maxConcurrent: number; minTime: number }
-  ) {
+  private buildProcessingOptions(options: CommandOptions, rateLimitConfig: { maxConcurrent: number; minTime: number }) {
     return {
       folderPath: options.folder ?? 'files',
       outputPath: options.output ?? './output/uploaded-files.json',

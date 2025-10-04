@@ -8,9 +8,9 @@ import axios from 'axios';
 import * as fs from 'fs-extra';
 import * as os from 'os';
 
-import { MetricsCollector } from './metrics-collector';
-import { StructuredLogger } from './structured-logger';
-import { HealthCheckResult, HealthStatus } from './types';
+import { HealthCheckResult, HealthStatus } from '../types';
+import { MetricsCollector } from './metrics.collector';
+import { StructuredLogger } from './structured.logger';
 
 type SystemSnapshot = {
   totalMemory: number;

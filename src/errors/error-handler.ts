@@ -4,11 +4,11 @@
  */
 
 import { LogContext, StructuredLogger } from '../observability';
-import { SystemError } from './system.error';
-import { PinataError } from './pinata.error';
-import { NetworkError } from './network.error';
-import { FileSystemError } from './file-system.error';
 import { BaseApplicationError, ErrorCode } from './base-error';
+import { FileSystemError } from './file-system.error';
+import { NetworkError } from './network.error';
+import { PinataError } from './pinata.error';
+import { SystemError } from './system.error';
 
 /**
  * Error handler utility for centralized error processing

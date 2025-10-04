@@ -4,7 +4,7 @@
  */
 
 import Bottleneck from 'bottleneck';
-import { createHash, type BinaryToTextEncoding } from 'crypto';
+import { BinaryToTextEncoding, createHash } from 'crypto';
 
 import { FileMapping, IHashCalculator, IHashDigestStrategy } from '../types';
 import { FileUtils } from '../utils';

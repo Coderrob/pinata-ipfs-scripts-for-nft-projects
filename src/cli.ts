@@ -9,7 +9,7 @@
 
 import 'dotenv/config';
 
-import { Command } from 'commander';
+import { Command, CommanderError } from 'commander';
 
 import { CIDCommand, DownloadCommand, HashCommand, UploadFilesCommand, UploadFolderCommand } from './commands';
 
@@ -72,9 +72,44 @@ class PinataCLI {
   }
 
   private handleErrors(): void {
-    this.program.exitOverride();
+    this.program.exitOverride(err => {
+      // Handle Commander.js specific errors gracefully
+      if (err.code === 'commander.help' || err.code === 'commander.helpDisplayed') {
+        // Help was displayed, exit normally
+        process.exit(0);
+      } else if (err.code === 'commander.version') {
+        // Version was displayed, exit normally
+        process.exit(0);
+      } else if (err.code === 'commander.unknownCommand' || err.code === 'commander.invalidArgument') {
+        // Command errors - let Commander.js handle the message display, just exit cleanly
+        process.exit(err.exitCode || 1);
+      } else {
+        // Other commander errors
+        throw err;
+      }
+    });
 
     process.on('uncaughtException', error => {
+      // Only log actual errors, not Commander.js normal operations
+      if (error.name === 'CommanderError') {
+        const commanderError = error as CommanderError;
+        if (
+          commanderError.code === 'commander.help' ||
+          commanderError.code === 'commander.helpDisplayed' ||
+          commanderError.code === 'commander.version'
+        ) {
+          // These are normal operations, exit gracefully
+          process.exit(commanderError.exitCode || 0);
+        } else if (
+          commanderError.code === 'commander.unknownCommand' ||
+          commanderError.code === 'commander.invalidArgument'
+        ) {
+          // Command errors - show message and exit with error code
+          console.error(commanderError.message);
+          process.exit(commanderError.exitCode || 1);
+        }
+      }
+
       console.error('💥 Uncaught Exception:', error);
       process.exit(1);
     });

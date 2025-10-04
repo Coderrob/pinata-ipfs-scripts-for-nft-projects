@@ -5,10 +5,11 @@
 
 import { Command } from 'commander';
 
+import { OutputPaths } from '../config/output-paths';
 import { DownloadProcessor } from '../core';
 import { CommandOptions, PinStatus } from '../types';
 import { BaseCommand } from './base.command';
-import { DefaultOutputs, OptionGroups } from './options';
+import { OptionGroups } from './options';
 
 export class DownloadCommand extends BaseCommand {
   constructor() {
@@ -18,13 +19,10 @@ export class DownloadCommand extends BaseCommand {
   public configure(program: Command): void {
     const command = program.command('download').description('Download CID mappings from Pinata');
 
-    // Add reusable options
-    OptionGroups.download.forEach(option => {
+    // Add reusable options with default output path
+    OptionGroups.download(OutputPaths.FILES.downloadedCids).forEach(option => {
       command.addOption(option);
     });
-
-    // Set default for output if not specified
-    command.option('-o, --output <path>', 'Output path for CID mappings', DefaultOutputs.downloadedCids);
 
     command.action(async (options: CommandOptions & { status?: string }) => {
       await this.execute(options);

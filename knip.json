@@ -1,7 +1,7 @@
 {
   "entry": ["src/**/*.{js,ts}"],
   "project": ["src/**/*.{js,ts}"],
-  "ignore": ["node_modules/**", "coverage/**", "dist/**", "build/**", "src/bak/**"],
+  "ignore": ["node_modules/**", "coverage/**", "dist/**", "build/**"],
   "ignoreDependencies": [],
   "ignoreExportsUsedInFile": false,
   "includeEntryExports": false

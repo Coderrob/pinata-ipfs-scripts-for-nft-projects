@@ -5,3 +5,4 @@
 
 export { ConfigurationManager } from './configuration-manager';
 export { AppConfig } from './app-config';
+export { OutputPaths, DefaultOutputs } from './output-paths';

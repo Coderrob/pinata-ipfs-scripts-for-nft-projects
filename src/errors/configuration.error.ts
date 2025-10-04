@@ -1,4 +1,4 @@
-import { BaseApplicationError, ErrorContext, ErrorCode, ErrorSeverity } from './base-error';
+import { BaseApplicationError, ErrorCode, ErrorContext, ErrorSeverity } from './base-error';
 
 /**
  * Configuration related errors

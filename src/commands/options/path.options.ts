@@ -17,9 +17,20 @@ export class PathOptions {
   );
 
   /**
-   * Output path option - used by: all commands
+   * Create an output option with a specific default path
    */
-  static readonly output = new Option('-o, --output <path>', 'Output path for results');
+  static createOutput(defaultPath?: string, description = 'Output path for results'): Option {
+    const option = new Option('-o, --output <path>', description);
+    if (defaultPath) {
+      option.default(defaultPath);
+    }
+    return option;
+  }
+
+  /**
+   * Basic output option without default - used when default is set elsewhere
+   */
+  static readonly output = PathOptions.createOutput();
 
   /**
    * Metadata folder specific option - used by: upload-folder

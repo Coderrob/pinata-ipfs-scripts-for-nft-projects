@@ -5,10 +5,11 @@
 
 import { Command } from 'commander';
 
+import { OutputPaths } from '../config/output-paths';
 import { FolderUploadProcessor } from '../core';
 import { CommandOptions } from '../types';
 import { BaseCommand } from './base.command';
-import { DefaultOutputs, OptionGroups } from './options';
+import { OptionGroups } from './options';
 
 export class UploadFolderCommand extends BaseCommand {
   constructor() {
@@ -18,13 +19,10 @@ export class UploadFolderCommand extends BaseCommand {
   public configure(program: Command): void {
     const command = program.command('upload-folder').description('Upload an entire folder to Pinata IPFS');
 
-    // Add reusable options
-    OptionGroups.uploadFolder.forEach(option => {
+    // Add reusable options with default output path
+    OptionGroups.uploadFolder(OutputPaths.FILES.folderCid).forEach(option => {
       command.addOption(option);
     });
-
-    // Set default for output if not specified
-    command.option('-o, --output <path>', 'Output path for upload result', DefaultOutputs.folderCid);
 
     command.action(async (options: CommandOptions & { name?: string }) => {
       await this.execute(options);

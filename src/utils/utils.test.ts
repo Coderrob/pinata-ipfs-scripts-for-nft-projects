@@ -3,7 +3,7 @@
  * Copyright (c) 2025 Robert (Coderrob) Lindley
  */
 
-import { FileUtils, Logger, ObjectUtils } from '.';
+import { FileUtils, Logger, ObjectUtils } from ".";
 
 describe('FileUtils', () => {
   describe('getFileName', () => {

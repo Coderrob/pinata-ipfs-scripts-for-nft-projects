@@ -4,7 +4,8 @@
  * Copyright (c) 2025 Robert (Coderrob) Lindley
  */
 
-import { MetricsCollector, PerformanceMetrics, StructuredLogger } from '../observability';
+import { MetricsCollector, StructuredLogger } from '../observability';
+import { PerformanceMetrics } from '../types';
 
 /**
  * Performance monitoring decorator and utilities

@@ -10,16 +10,17 @@ import * as fs from 'fs-extra';
 import { read } from 'recursive-fs';
 
 import pinataSdk from '@pinata/sdk';
+
 import {
   FileMapping,
-  IPinataService,
-  PinataConfig,
-  IPinListResponse,
-  IPinataClient,
-  IPinListFilter,
-  PinStatus,
-  IPinataPin,
   IFileCheck,
+  IPinataClient,
+  IPinataPin,
+  IPinataService,
+  IPinListFilter,
+  IPinListResponse,
+  PinataConfig,
+  PinStatus,
 } from '../types';
 import { isEmptyArray, isTruthy, Logger } from '../utils';
 

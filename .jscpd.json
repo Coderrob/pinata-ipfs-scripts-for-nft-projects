@@ -1,0 +1,13 @@
+{
+  "threshold": 1,
+  "reporters": ["console", "html"],
+  "ignore": ["**/node_modules/**", "**/coverage/**", "**/*.min.js"],
+  "absolute": true,
+  "gitignore": true,
+  "output": "./reports/jscpd/",
+  "format": ["javascript"],
+  "minLines": 5,
+  "maxLines": 500,
+  "minTokens": 25,
+  "maxSize": "30kb"
+}

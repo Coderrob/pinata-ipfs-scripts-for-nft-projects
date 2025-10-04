@@ -39,7 +39,7 @@ export class PinataService implements IPinataService {
    * @returns The IPFS hash of the uploaded file
    */
   public async uploadFile(filePath: string, fileName: string): Promise<string> {
-    this.logger.info(Uploading file: );
+    this.logger.info(`Uploading file: ${fileName}`);
 
     try {
       const readableStreamForFile = fs.createReadStream(filePath);
@@ -49,12 +49,12 @@ export class PinataService implements IPinataService {
         },
       });
 
-      this.logger.info(File uploaded successfully: , {
+      this.logger.info(`File uploaded successfully: ${fileName}`, {
         cid: response.IpfsHash,
       });
       return response.IpfsHash;
     } catch (error) {
-      this.logger.error(Failed to upload file: , error);
+      this.logger.error(`Failed to upload file: ${fileName}`, error);
       throw error;
     }
   }
@@ -66,17 +66,17 @@ export class PinataService implements IPinataService {
    * @returns The IPFS hash of the uploaded folder
    */
   public async uploadFolder(folderPath: string, folderName: string): Promise<string> {
-    this.logger.info(Uploading folder: );
+    this.logger.info(`Uploading folder: ${folderName}`);
 
     try {
       const { files } = await read(folderPath);
       if (!files || isEmptyArray(files)) {
-        throw new Error(No files found in folder: );
+        throw new Error(`No files found in folder: ${folderPath}`);
       }
 
       const formData = new FormData();
       files.forEach((filePath: string) => {
-        this.logger.info(Adding file: );
+        this.logger.info(`Adding file: ${filePath}`);
         formData.append('file', fs.createReadStream(filePath), {
           filepath: basePathConverter(folderPath, filePath),
         });
@@ -92,18 +92,18 @@ export class PinataService implements IPinataService {
       const response = await axios.post(this.PINATA_API_PINFILETOIPFS, formData, {
         maxBodyLength: Infinity,
         headers: {
-          'Content-Type': multipart/form-data; boundary=,
+          'Content-Type': `multipart/form-data; boundary=${formData.getBoundary()}`,
           pinata_api_key: this.config.apiKey,
           pinata_secret_api_key: this.config.apiSecret,
         },
       });
 
-      this.logger.info(Folder uploaded successfully: , {
+      this.logger.info(`Folder uploaded successfully: ${folderName}`, {
         cid: response.data.IpfsHash,
       });
       return response.data.IpfsHash;
     } catch (error) {
-      this.logger.error(Failed to upload folder: , error);
+      this.logger.error(`Failed to upload folder: ${folderName}`, error);
       throw error;
     }
   }
@@ -212,7 +212,7 @@ export class PinataService implements IPinataService {
   private isEmptyResult(totalResults: number, rowCount: number, status: PinStatus): boolean {
     if (totalResults === 0 || rowCount <= 0) {
       if (totalResults === 0) {
-        this.logger.info(No '' files or folders were found);
+        this.logger.info(`No '${status}' files or folders were found`);
       }
       return true;
     }

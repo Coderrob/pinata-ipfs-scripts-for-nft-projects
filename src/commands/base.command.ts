@@ -73,7 +73,7 @@ export abstract class BaseCommand {
    * @param message - Completion message
    */
   protected logSuccess(message: string): void {
-    this.logger.info(`?o. ${message}`);
+    this.logger.info(`[OK] ${message}`);
   }
 
   /**
